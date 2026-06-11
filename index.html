@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Atlas — Orium Tech Bootcamp</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-50: #EEEDFE; --purple-200: #AFA9EC; --purple-600: #534AB7; --purple-800: #3C3489;
+    --teal-50: #E1F5EE; --teal-600: #0F6E56; --teal-800: #085041;
+    --amber-50: #FAEEDA; --amber-600: #854F0B; --amber-800: #633806;
+    --red-50: #FCEBEB; --red-600: #A32D2D; --red-800: #791F1F;
+    --gray-50: #F1EFE8; --gray-100: #D3D1C7; --gray-400: #888780; --gray-800: #444441;
+    --text: #1a1a1a; --text-secondary: #555; --text-tertiary: #888;
+    --border: #e0ddd6; --surface: #fafaf8; --bg: #ffffff;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--bg);
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+  }
+
+  /* Typography */
+  h1 { font-size: 28px; font-weight: 500; letter-spacing: -0.3px; margin-bottom: 8px; }
+  h2 { font-size: 20px; font-weight: 500; margin: 2.5rem 0 1rem; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 16px; font-weight: 500; margin: 1.5rem 0 0.5rem; }
+  h4 { font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-tertiary); margin: 1.25rem 0 0.5rem; }
+  p { margin-bottom: 0.75rem; color: var(--text-secondary); }
+  p:last-child { margin-bottom: 0; }
+  strong { font-weight: 500; color: var(--text); }
+  code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; background: var(--gray-50); padding: 1px 5px; border-radius: 4px; color: var(--gray-800); }
+  a { color: var(--purple-600); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Layout */
+  .doc-header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid var(--text); }
+  .doc-meta { font-size: 13px; color: var(--text-tertiary); margin-top: 6px; }
+  .section { margin-bottom: 2.5rem; }
+
+  /* Cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 10px; }
+  .card-title { font-size: 15px; font-weight: 500; margin-bottom: 4px; color: var(--text); }
+  .card p { font-size: 14px; }
+
+  /* Badges */
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; margin-right: 5px; vertical-align: middle; }
+  .badge-purple { background: var(--purple-50); color: var(--purple-800); }
+  .badge-teal { background: var(--teal-50); color: var(--teal-800); }
+  .badge-amber { background: var(--amber-50); color: var(--amber-800); }
+  .badge-red { background: var(--red-50); color: var(--red-800); }
+  .badge-gray { background: var(--gray-50); color: var(--gray-800); }
+
+  /* Lists */
+  ul, ol { padding-left: 1.4rem; color: var(--text-secondary); }
+  ul li, ol li { margin-bottom: 5px; font-size: 14px; line-height: 1.6; }
+  ul li::marker { color: var(--gray-400); }
+
+  /* Phase table */
+  .phase-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 14px; }
+  .phase-table th { text-align: left; padding: 8px 12px; font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); border-bottom: 1px solid var(--border); }
+  .phase-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-secondary); }
+  .phase-table tr:last-child td { border-bottom: none; }
+  .phase-table td:first-child { font-weight: 500; color: var(--text); white-space: nowrap; width: 200px; }
+  .phase-table td:nth-child(2) { color: var(--text-tertiary); width: 100px; }
+
+  /* Tickets */
+  .ticket { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 10px; }
+  .ticket-id { font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px; }
+  .ticket-title { font-size: 15px; font-weight: 500; margin-bottom: 8px; color: var(--text); }
+  .ticket-note { margin-top: 10px; padding: 8px 10px; background: var(--amber-50); border-radius: 6px; font-size: 12px; color: var(--amber-600); }
+
+  /* Team comments */
+  .comment { display: flex; gap: 10px; margin-bottom: 14px; }
+  .avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; margin-top: 2px; }
+  .av-pm { background: var(--purple-50); color: var(--purple-800); }
+  .av-design { background: var(--amber-50); color: var(--amber-800); }
+  .av-tl { background: var(--teal-50); color: var(--teal-800); }
+  .av-client { background: var(--red-50); color: var(--red-800); }
+  .comment-inner { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; flex: 1; }
+  .comment-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .comment-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* Architecture */
+  .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .arch-box { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 13px; font-weight: 500; color: var(--text); }
+  .arch-arrow { color: var(--text-tertiary); font-size: 13px; }
+
+  /* Risks */
+  .risk-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+  .risk-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .risk-high { background: #E24B4A; }
+  .risk-med { background: #EF9F27; }
+  .risk-text { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* Tradeoff options */
+  .tradeoff { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }
+  .tradeoff-label { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .tradeoff-desc { font-size: 13px; color: var(--text-tertiary); }
+
+  /* Success criteria */
+  .criteria { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 10px; }
+  .criteria ul { margin-top: 6px; }
+
+  /* One-pager for tech leads */
+  .onepager { border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 1.5rem 0; background: var(--surface); }
+  .onepager h2 { border: none; margin-top: 0; padding: 0 0 8px; }
+
+  /* TOC */
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+  .toc h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-tertiary); margin: 0 0 10px; }
+  .toc ol { padding-left: 1.2rem; }
+  .toc li { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  .toc li a { color: var(--text-secondary); }
+  .toc li.phase { font-weight: 500; color: var(--text); margin-top: 6px; list-style: none; margin-left: -1.2rem; }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* Print */
+  @media print {
+    body { padding: 1.5rem; }
+    .card, .ticket, .comment-inner, .criteria, .tradeoff { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <h1>Project Atlas</h1>
+  <div class="doc-meta">Tech Bootcamp — Phase 3 proposal · For review by Nik and engineering leads</div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem; border-left: 3px solid var(--purple-600); border-radius: 0 10px 10px 0;">
+  <div class="card-title">What we're proposing — and what we need from you</div>
+  <p>This document proposes a new Phase 3 for the tech bootcamp, replacing the standalone accelerator setup and exercises with a single project simulation called Project Atlas. The technical work is the same. The framing is different: every task now lives inside a realistic client project so developers learn the stack, the AI workflows, and how Orium actually delivers — together, not in sequence.</p>
+  <p style="margin-top: 6px;">We need your read on whether this feels authentic. Does the scenario reflect a real Orium project? Are the tickets written the way Orium actually writes them? Would a senior developer joining your team find this useful — or would it feel like a detour?</p>
+  <p style="margin-top: 6px; font-size: 13px; color: var(--text-tertiary);">The full simulation is in Part 2. The ask of tech leads is in Part 3.</p>
+</div>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <ol>
+    <li class="phase">Part 1 — Proposed bootcamp structure</li>
+    <li class="phase">Part 2 — Project Atlas</li>
+    <li>What success looks like after onboarding</li>
+    <li>Project brief</li>
+    <li>Jira board</li>
+    <li>Team comments</li>
+    <li>Before you escalate</li>
+    <li>Launch recommendation</li>
+    <li>What good looks like</li>
+    <li class="phase">Part 3 — What we're asking from tech leads</li>
+  </ol>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- PART 1: PROPOSED STRUCTURE -->
+<!-- ============================================================ -->
+
+<h2>Part 1 — Proposed bootcamp structure</h2>
+
+<div class="section">
+  <h3>Phase breakdown</h3>
+
+  <table class="phase-table">
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>Time</th>
+        <th>What it covers</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Phase 1 — How we work</td>
+        <td>1–2 days</td>
+        <td>AI mindset, consulting framing, problem-before-code thinking. Exercise 0. Buddy check-in. <a href="https://docs.google.com/document/d/1rg4A2AIntU3TTc_Xz0B_G0HYGi9K0Ez07dgEfbHcsI0/edit?tab=t.0" style="font-size: 13px;">→ View full bootcamp draft</a></td>
+      </tr>
+      <tr>
+        <td>Phase 2 — Foundations</td>
+        <td>1–2 days</td>
+        <td>Core stack (JS, TS, React, Next.js, a11y). Composable commerce overview. How Orium project teams operate. Team roles. Move fast if the stack is familiar.</td>
+      </tr>
+      <tr>
+        <td>Phase 3 — Project Atlas</td>
+        <td>1–2 weeks</td>
+        <td>Structured as four parts (see below). One coherent project experience that covers environment setup, architecture understanding, feature development, and a tradeoff decision.</td>
+      </tr>
+      <tr>
+        <td>Ongoing support</td>
+        <td>—</td>
+        <td>Working with your buddy. Resource hub.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top: 1.5rem;">Phase 3 — Project Atlas: four parts</h3>
+
+  <table class="phase-table">
+    <thead>
+      <tr>
+        <th>Part</th>
+        <th></th>
+        <th>What happens</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Orientation</td>
+        <td>~1 day</td>
+        <td>Read the project brief. Review the architecture. Understand how data flows. Review the Jira board. Use AI to surface what's missing, ambiguous, or risky before touching anything.</td>
+      </tr>
+      <tr>
+        <td>Project setup</td>
+        <td>~2–3 days</td>
+        <td>Provision the environment — accelerator, Contentful, commercetools, Algolia — framed as ATLAS-001: <em>prepare local environment for the Fieldstone project.</em> The goal isn't just a working environment — it's understanding what you'll be debugging and extending on this project.</td>
+      </tr>
+      <tr>
+        <td>Implementation</td>
+        <td>~3–5 days</td>
+        <td>Plan approach with AI before opening the codebase. Complete assigned work for ATLAS-101 through 103 (press release content model, detail page, listing page), or document what you'd split, defer, and why. Review with buddy before shipping.</td>
+      </tr>
+      <tr>
+        <td>Launch readiness review</td>
+        <td>~1 day + buddy session</td>
+        <td>Launch is in 10 days. Filtering is unbuilt. PDFs are partially scoped. Write a recommendation with rationale and risks. Present to buddy acting as Tech Lead. <em>This is the only step requiring 30–45 min of senior time.</em></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- PART 2: PROJECT ATLAS IN FULL -->
+<!-- ============================================================ -->
+
+<h2>Part 2 — Project Atlas</h2>
+
+<div class="section">
+  <h3>What success looks like after onboarding</h3>
+  <p style="margin-bottom: 1rem;">Atlas covers your first one to two weeks. Here's what the arc looks like beyond that — so you know what you're building toward.</p>
+
+  <div class="card">
+    <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 6px 8px 6px 0; font-weight: 500; color: var(--text); width: 120px; border-bottom: 1px solid var(--border); vertical-align: top;">By 30 days</td>
+        <td style="padding: 8px 0 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Picking up scoped stories with support. Asking good questions before building. Using AI effectively for orientation and implementation.</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; font-weight: 500; color: var(--text); border-bottom: 1px solid var(--border); vertical-align: top;">By 60 days</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Contributing independently. Surfacing risks early rather than late. Starting to shape how work gets scoped and planned.</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; font-weight: 500; color: var(--text); vertical-align: top;">By 90 days</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); vertical-align: top;">Adding project velocity. Improving team patterns. Helping others move faster — not just doing your own work well.</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="card" style="background: #f5f4fe; border-color: var(--purple-200);">
+    <div class="card-title">Welcome to Project Atlas</div>
+    <p>You're joining an active Orium project. A mid-market retailer is launching a composable storefront. Discovery is complete. The team is 4 weeks from launch. Your first story is waiting.</p>
+    <p style="margin-top: 6px;">The point of Atlas is to practice contributing project velocity: understanding context quickly, using AI well, identifying ambiguity early, and moving work forward without waiting for perfect information.</p>
+    <p style="margin-top: 6px; font-size: 13px; color: var(--text-tertiary);">Read the brief. Review the Jira board. Read the team comments. Then decide what you'd do first.</p>
+  </div>
+
+  <div class="card" style="margin-top: 10px; border-left: 3px solid var(--teal-600); border-radius: 0 10px 10px 0;">
+    <div class="card-title">How Orium teams work</div>
+    <p>Orium projects are collaborative by default. PMs, designers, developers, and tech leads work together to move work forward. You're not expected to have every answer on day one. You are expected to identify ambiguity, ask thoughtful questions, and bring recommendations — not just problems.</p>
+  </div>
+</div>
+
+<!-- PROJECT BRIEF -->
+<div class="section">
+  <h3>Project brief</h3>
+  <div class="card" style="border-left: 3px solid var(--purple-600); border-radius: 0 10px 10px 0; margin-bottom: 1.25rem;">
+    <div class="card-title">Use the right AI tool for the task</div>
+    <p>Today, many Orium developers use Claude for reasoning, planning, debugging, and long-context work — orientation, understanding architecture, drafting tickets. For everyday coding and autocomplete, GitHub Copilot inside VS Code. For repo-wide refactoring or navigating unfamiliar codebases, Cursor.</p>
+    <p style="margin-top: 6px;">The general principle: AI is most useful when the task has enough context to work with. For agents specifically — watch the output, keep tasks small, and validate everything. Token cost and time cost are real.</p>
+  </div>
+
+  <h4>Client</h4>
+  <div class="card">
+    <div class="card-title">Fieldstone Supply Co.</div>
+    <p>Mid-market building materials retailer. B2B and B2C customers. Currently on a legacy monolithic platform. Launching a new composable storefront to support expansion into French-Canadian markets.</p>
+  </div>
+
+  <h4>Business goals</h4>
+  <div class="card">
+    <ul>
+      <li>Launch English and French-Canadian storefronts simultaneously</li>
+      <li>Migrate existing press release archive from legacy CMS (47 press releases, mostly free-text HTML)</li>
+      <li>Support compliance team's requirement for downloadable PDF press releases</li>
+      <li>Maintain SEO equity from existing site structure</li>
+    </ul>
+  </div>
+
+  <h4>Architecture</h4>
+  <div class="card">
+    <p style="margin-bottom: 10px; font-size: 13px;">Commerce data flow:</p>
+    <div class="arch-flow">
+      <div class="arch-box">commercetools</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Accelerator</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Algolia</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Next.js storefront</div>
+    </div>
+    <p style="margin-top: 10px; margin-bottom: 10px; font-size: 13px;">Content data flow:</p>
+    <div class="arch-flow">
+      <div class="arch-box">Contentful</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Accelerator</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Next.js storefront</div>
+    </div>
+    <p style="margin-top: 12px; font-size: 13px; color: var(--text-tertiary);">Hosted on Vercel. Two locales: <code>en-CA</code> and <code>fr-CA</code>. Contentful handles all editorial content including press releases.</p>
+  </div>
+
+  <h4>Known risks</h4>
+  <div class="card">
+    <div class="risk-row"><div class="risk-dot risk-high"></div><div class="risk-text">French-Canadian locale not yet tested end-to-end — number and date formatting unverified</div></div>
+    <div class="risk-row"><div class="risk-dot risk-high"></div><div class="risk-text">PDF compliance requirement surfaced late — not in original scope, no Contentful model exists yet</div></div>
+    <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">Press release filtering by year requested by client but not in approved scope</div></div>
+    <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">Legacy migration — 47 press releases, no structured data, mostly free-text HTML</div></div>
+  </div>
+
+  <h4>Launch timeline</h4>
+  <div class="card">
+    <p><strong>Week 1–2</strong> — Feature development <span class="badge badge-purple">You are here</span></p>
+    <p><strong>Week 3</strong> — UAT with client stakeholders</p>
+    <p><strong>Week 4</strong> — Launch readiness review + go-live</p>
+  </div>
+</div>
+
+<!-- JIRA BOARD -->
+<div class="section">
+  <h3>Jira board</h3>
+  <p style="margin-bottom: 0.5rem;">These are your tickets. Some are complete. Some are intentionally missing information — just like real tickets.</p>
+  <p style="margin-bottom: 1rem; font-size: 13px; color: var(--text-tertiary);">Use Claude to review the board, surface what's ambiguous or missing, and draft a list of clarifying questions before you start building. The goal is to identify problems with the tickets before they become problems in the code.</p>
+
+  <div class="ticket">
+    <div class="ticket-id">ATLAS-001 <span class="badge badge-gray">Setup</span> <span class="badge badge-purple">Start here</span></div>
+    <div class="ticket-title">Prepare local environment for Fieldstone Supply Co.</div>
+    <p style="font-size: 14px;">Get the accelerator running locally with all required platforms connected.</p>
+    <ul style="margin-top: 8px;">
+      <li>Accelerator running locally</li>
+      <li>commercetools configured and product data imported</li>
+      <li>Contentful connected with initial content loaded</li>
+      <li>Algolia configured and indexing functioning</li>
+      <li>Homepage, PLP, PDP, and checkout all verified</li>
+    </ul>
+    <div class="ticket-note">💡 Before you provision anything: review the architecture diagram and understand how data flows between systems. The goal isn't just a working environment — it's understanding what you'll be debugging and extending on this project.</div>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-id">ATLAS-101 <span class="badge badge-purple">In progress</span> <span class="badge badge-gray">Yours</span></div>
+    <div class="ticket-title">Create Press Release content type in Contentful</div>
+    <p style="font-size: 14px;">Set up the Contentful content model to support press releases on the new storefront.</p>
+    <ul style="margin-top: 8px;">
+      <li>Fields: title, slug, date, summary, body (rich text), hero image</li>
+      <li>Should support both <code>en-CA</code> and <code>fr-CA</code> locales</li>
+      <li>Reuse existing patterns from the Blog content type where possible</li>
+    </ul>
+    <div class="ticket-note">⚠️ Client has asked about PDF attachments. Not in scope for this ticket. See ATLAS-104. Tech lead flagged: resolve ATLAS-104 scope before modifying this model.</div>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-id">ATLAS-102 <span class="badge badge-gray">To do</span></div>
+    <div class="ticket-title">Build Press Release detail page</div>
+    <p style="font-size: 14px;">Create the individual press release page at <code>/press-releases/[slug]</code>.</p>
+    <ul style="margin-top: 8px;">
+      <li>Render title, date, hero image, and rich text body</li>
+      <li>Support both locales</li>
+      <li>Match design — Figma link in Confluence (link appears broken, may need to re-export)</li>
+    </ul>
+    <div class="ticket-note">⚠️ No acceptance criteria attached. Acceptance criteria in description were copied from ATLAS-103 and have not been updated for this ticket. Confluence design page last updated 7 months ago — verify with Marcus before building against it.</div>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-id">ATLAS-103 <span class="badge badge-gray">To do</span></div>
+    <div class="ticket-title">Build Press Release listing page</div>
+    <p style="font-size: 14px;">Create the listing page at <code>/press-releases</code> showing all available press releases.</p>
+    <ul style="margin-top: 8px;">
+      <li>Display: title, date, summary, hero image, link to detail page</li>
+      <li>Should handle empty state gracefully</li>
+      <li>Client has asked about year filtering — not in current scope</li>
+    </ul>
+    <div class="ticket-note">⚠️ Performance flag: early testing shows this page may be fetching more Contentful data than needed. Before this ticket is considered complete, review the Contentful payload shape, image handling, caching approach, and whether any unnecessary linked content is being resolved. Do not ship a dynamically generated page without a caching strategy in place.</div>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-id">ATLAS-104 <span class="badge badge-amber">Needs clarification</span></div>
+    <div class="ticket-title">Support downloadable PDFs for press releases</div>
+    <p style="font-size: 14px;">Compliance team requires some press releases to be available as downloadable PDFs.</p>
+    <ul style="margin-top: 8px;">
+      <li>Scope unclear — PDF upload vs. auto-generated from content?</li>
+      <li>Not in original SOW. Raised by client in last standup.</li>
+      <li>May require Contentful model change — dependency on ATLAS-101</li>
+    </ul>
+    <div class="ticket-note">⚠️ No acceptance criteria. No design. Do not build until scope is resolved with PM and tech lead.</div>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-id">ATLAS-105 <span class="badge badge-red">Launch blocker</span></div>
+    <div class="ticket-title">Launch readiness review — press releases</div>
+    <p style="font-size: 14px;">Before go-live, confirm press release functionality meets launch requirements across all of the following areas.</p>
+    <ul style="margin-top: 8px;">
+      <li><strong>Content:</strong> All 47 migrated press releases rendering correctly in both <code>en-CA</code> and <code>fr-CA</code> locales</li>
+      <li><strong>SEO:</strong> Slugs match legacy URLs or redirects are confirmed in place</li>
+      <li><strong>Compliance:</strong> PDF requirement resolved (see ATLAS-104)</li>
+      <li><strong>Accessibility:</strong> Smoke check against WCAG 2.1 AA — keyboard navigation, focus states, image alt text, colour contrast</li>
+      <li><strong>Mobile:</strong> Listing and detail pages verified on mobile viewport — layout, image sizing, touch targets</li>
+      <li><strong>Performance:</strong> Lighthouse / Core Web Vitals pass on listing and detail pages — flag any LCP or CLS issues before sign-off</li>
+      <li><strong>Caching:</strong> Confirm caching strategy is in place for both pages — do not go live on a dynamically generated page without it</li>
+      <li><strong>Regression:</strong> Verify existing accelerator pages (homepage, PLP, PDP, checkout) are unaffected</li>
+      <li><strong>Deployment:</strong> PR preview URL reviewed and confirmed before merge to main</li>
+      <li><strong>Client sign-off:</strong> Press release section signed off by Fieldstone stakeholder</li>
+    </ul>
+  </div>
+</div>
+
+<!-- TEAM COMMENTS -->
+<div class="section">
+  <h3>Team comments</h3>
+  <p style="margin-bottom: 1rem;">These came in this morning across Jira and Slack. Read them before you start building.</p>
+
+  <div class="comment">
+    <div class="avatar av-pm">PM</div>
+    <div class="comment-inner">
+      <div class="comment-name">Sarah (PM)</div>
+      <div class="comment-text">Client brought up filtering by year again on the call. They really want it for launch. I know it's not in scope but can we get a quick read on feasibility? Launch is in 10 days.</div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <div class="avatar av-pm">PM</div>
+    <div class="comment-inner">
+      <div class="comment-name">Sarah (PM)</div>
+      <div class="comment-text">Also — quick question on the PDFs. Could we just store them as assets in commercetools? That way they're in one place with the product data. Seems simpler than adding another field to Contentful?</div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <div class="avatar av-design">D</div>
+    <div class="comment-inner">
+      <div class="comment-name">Marcus (Designer)</div>
+      <div class="comment-text">FYI the Figma for the listing page shows year filtering in the sidebar — I designed it that way based on an early conversation. Not sure if that's still the plan, nobody told me it was descoped. Let me know if I should update the designs.</div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <div class="avatar av-tl">TL</div>
+    <div class="comment-inner">
+      <div class="comment-name">Dev (Tech Lead)</div>
+      <div class="comment-text">On the PDF question — before we touch the Contentful model, let's understand what compliance actually needs. "Downloadable PDF" could mean a lot of things. Don't build anything on ATLAS-104 until we know. Also, reuse Blog content type patterns as much as possible on 101.</div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <div class="avatar av-client">C</div>
+    <div class="comment-inner">
+      <div class="comment-name">Fieldstone (Client stakeholder)</div>
+      <div class="comment-text">Quick note — a few of our older press releases exist only as PDFs. No HTML version. We'll need those on the site too somehow. Is that a problem?</div>
+    </div>
+  </div>
+</div>
+
+<!-- SME + DEVELOPER VOICE -->
+<div class="section">
+  <h3>Before you escalate</h3>
+  <p style="margin-bottom: 1rem;">When you hit a wall, the instinct to ask for help immediately is understandable — but on real projects, knowing <em>who</em> to ask and <em>what kind of problem</em> you have first is part of the job. Orium has SMEs across every platform area. Before you escalate, take a moment to categorize the issue:</p>
+
+  <div class="card">
+    <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 6px 8px 6px 0; font-weight: 500; color: var(--text); width: 35%; border-bottom: 1px solid var(--border); vertical-align: top;">Type of problem</td>
+        <td style="padding: 6px 0; font-weight: 500; color: var(--text); border-bottom: 1px solid var(--border); vertical-align: top;">Who to reach</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Accelerator pattern or architecture question</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for Accelerator / Starter Kit</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Contentful content model or API behaviour</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for Contentful</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Algolia search, indexing, or ranking</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for Algolia</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">commercetools data, pricing, or API</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for commercetools</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Accessibility requirement or WCAG question</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for Accessibility</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Next.js or React architecture</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for Next.js / React</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); vertical-align: top;">Vercel deployment, edge config, or CI/CD</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); vertical-align: top;">Check the current SME list for Vercel</td>
+      </tr>
+    </table>
+  </div>
+
+  <p style="margin-top: 1rem; font-size: 13px; color: var(--text-tertiary);">The SME list is maintained in the Best Practices Confluence space and changes as the team evolves — always check there for current contacts. If you're unsure how to categorize your problem, bring it to your buddy first. They'll help you route it.</p>
+
+  <div class="card" style="margin-top: 1.25rem; background: var(--purple-50); border-color: var(--purple-200);">
+    <div class="card-title" style="color: var(--purple-800);">From an Orian</div>
+    <p style="color: var(--purple-800); opacity: 0.85;">"You don't need to know every line of code anymore. Your job is to provide context, review outcomes, and guide the work. Think of AI agents as capable junior developers."</p>
+    <p style="margin-top: 6px; font-size: 13px; color: var(--purple-600);">— Danny Lake</p>
+  </div>
+</div>
+
+<!-- TRADEOFF SCENARIO -->
+<div class="section">
+  <h3>Launch recommendation</h3>
+
+  <div class="card" style="margin-bottom: 1.25rem;">
+    <div class="card-title">The situation</div>
+    <p>It's day 8 of a 10-day sprint. Press releases are working. PDFs are partially scoped — compliance need is real, scope is still unclear. Filtering is not built. The Figma shows it. The client wants it. It's not in approved scope. Launch is in 10 days. The PM just asked you to give a recommendation on the call tomorrow.</p>
+  </div>
+
+  <h4>Your options</h4>
+
+  <div class="tradeoff">
+    <div class="tradeoff-label">Option A — Build everything before launch</div>
+    <div class="tradeoff-desc">Filtering, PDFs, full migration. Ship it all in 10 days.</div>
+  </div>
+  <div class="tradeoff">
+    <div class="tradeoff-label">Option B — Launch without filtering, resolve PDFs</div>
+    <div class="tradeoff-desc">Hit the compliance requirement. Defer filtering to a post-launch iteration.</div>
+  </div>
+  <div class="tradeoff">
+    <div class="tradeoff-label">Option C — Launch without filtering or PDFs</div>
+    <div class="tradeoff-desc">Scope is scope. Both items came in late. Document and defer both.</div>
+  </div>
+  <div class="tradeoff">
+    <div class="tradeoff-label">Option D — Recommend a short delay</div>
+    <div class="tradeoff-desc">Two unresolved items this close to launch is genuine risk. Push by one week.</div>
+  </div>
+
+  <div class="card" style="margin-top: 1rem; background: var(--teal-50); border-color: #9FE1CB;">
+    <div class="card-title" style="color: var(--teal-800);">Your deliverable</div>
+    <p>Before your buddy session: write up your recommendation. Don't just pick an option — state what you'd advise, what conditions must be true for that recommendation to hold, the risks you're accepting, and what you'd need from the client to move forward. Orium consultants don't just choose A, B, C, or D. They say: <em>we recommend B, but only if the client accepts X risk and signs off on Y.</em></p>
+  </div>
+</div>
+
+<!-- WHAT GOOD LOOKS LIKE -->
+<div class="section">
+  <h3>What good looks like</h3>
+  <p style="margin-bottom: 1rem;">By the end of Atlas, you should be able to join an active Orium project, navigate incomplete information, use AI to accelerate your work, and make a thoughtful recommendation under real constraints.</p>
+
+  <h4>You're done when</h4>
+  <div class="criteria">
+    <ul>
+      <li>You've used AI to summarize the project context and identify missing information before touching the codebase</li>
+      <li>You've identified the gaps and ambiguities across the Jira tickets and documented your assumptions</li>
+      <li>You've used AI to explore accelerator patterns before writing new code</li>
+      <li>You've completed the assigned implementation work for ATLAS-001 through 103, or documented what you'd split, defer, and why</li>
+      <li>You have a written recommendation for the launch decision with rationale and risks</li>
+      <li>Your buddy can push back on your thinking and you can defend it</li>
+    </ul>
+  </div>
+
+  <h4 style="margin-top: 1.25rem;">How your buddy evaluates you</h4>
+  <div class="criteria">
+    <ul>
+      <li><strong>Not:</strong> Did they build the feature correctly?</li>
+      <li><strong>But:</strong> Did they identify what was missing before building?</li>
+      <li><strong>But:</strong> Did they use AI to move faster — not just to generate code?</li>
+      <li><strong>But:</strong> Did they make reasonable assumptions and state them clearly?</li>
+      <li><strong>But:</strong> Did they communicate risk rather than hide it?</li>
+      <li><strong>But:</strong> Did they propose a path forward under real constraints?</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- PART 3: WHAT WE'RE ASKING FROM TECH LEADS -->
+<!-- ============================================================ -->
+
+<h2>Part 3 — What we're asking from tech leads</h2>
+
+<div class="onepager">
+  <h2>Your input before we move forward</h2>
+  <p style="font-size: 14px; color: var(--text-tertiary); margin-bottom: 1.25rem;">For Nik and engineering leads · Please review before we finalize</p>
+
+  <h3>What we're trying to solve</h3>
+  <p>Our goal is to help developers contribute meaningful project velocity faster. Today, much of onboarding happens outside the context of a real project — the stack gets learned, the tools get configured, but the delivery model and decision-making expectations come later, on a live client engagement. Atlas introduces that context earlier, so developers learn the technology, AI workflows, and consulting behaviours together rather than in sequence.</p>
+
+  <h3 style="margin-top: 1.25rem;">What we need you to tell us</h3>
+  <p>We've built this without real project data — which means the scenario, tickets, and team dynamics are plausible but not verified. Before we use this with actual new hires, we need engineering leads to pressure-test it:</p>
+
+  <div class="card" style="margin-top: 0.5rem;">
+    <ul style="margin: 0;">
+      <li><strong>Does the scenario feel like a real Orium project?</strong> Client type, architecture, constraints, timeline — does this ring true?</li>
+      <li><strong>Are the tickets written the way Orium actually writes them?</strong> The gaps and ambiguity are intentional — but are they the <em>right</em> kind of gaps?</li>
+      <li><strong>Is the tradeoff scenario realistic?</strong> Would a senior developer on your team actually face this kind of decision?</li>
+      <li><strong>If a developer completed Atlas, what would they still be missing before joining your project?</strong> This is the most important question — we'd rather know now than find out on a client engagement.</li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top: 1.5rem;">What we're asking of tech leads ongoing</h3>
+  <div class="card" style="border-left: 3px solid var(--purple-600); border-radius: 0 10px 10px 0;">
+    <p><strong>One conversation per new hire. 30–45 minutes.</strong></p>
+    <p style="margin-top: 6px;">At the end of Atlas, the developer presents their launch recommendation — their option, their rationale, the risks they'd accept. Your job is to push back on their thinking, not to give them the answer. This is the only part of Atlas that requires senior time. Everything else is self-directed.</p>
+  </div>
+
+  <h3 style="margin-top: 1.5rem;">Three questions to pressure-test this with us</h3>
+  <ol style="font-size: 14px; line-height: 1.9;">
+    <li>Does it teach the consulting behaviours we actually need — navigating ambiguity, communicating risk, recommending under constraints?</li>
+    <li>Does it preserve the technical fundamentals developers need to contribute on real projects?</li>
+    <li>Could we run this six months from now without heroic effort from tech leads?</li>
+  </ol>
+
+  <p style="margin-top: 1.25rem; font-size: 14px; color: var(--text-secondary);">If the answer to all three is yes, we'd like to move forward. If something feels off — the scenario, the ask, the structure — we want to know before this goes in front of a new hire. Your read on this matters more than ours.</p>
+</div>
+
+</body>
+</html>
