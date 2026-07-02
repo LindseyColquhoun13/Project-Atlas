@@ -135,13 +135,14 @@
 
 <div class="doc-header">
   <h1>Project Atlas</h1>
-  <div class="doc-meta">Tech Bootcamp — Phase 3 proposal · For review by Nik and engineering leads</div>
+  <div class="doc-meta">A realistic Orium project simulation · For review by Nik and engineering leads</div>
 </div>
 
 <div class="card" style="margin-bottom: 2rem; border-left: 3px solid var(--purple-600); border-radius: 0 10px 10px 0;">
-  <div class="card-title">What we're proposing — and what we need from you</div>
-  <p>This document proposes a new Phase 3 for the tech bootcamp, replacing the standalone accelerator setup and exercises with a single project simulation called Project Atlas. The technical work is the same. The framing is different: every task now lives inside a realistic client project so developers learn the stack, the AI workflows, and how Orium actually delivers — together, not in sequence.</p>
-  <p style="margin-top: 6px;">We need your read on whether this feels authentic. Does the scenario reflect a real Orium project? Are the tickets written the way Orium actually writes them? Would a senior developer joining your team find this useful — or would it feel like a detour?</p>
+  <div class="card-title">What we've built — and what we need from you</div>
+  <p>Project Atlas is a realistic Orium project simulation designed to replace the standalone accelerator setup exercises in Phase 3 of the tech bootcamp. The technical work is the same. The framing is different: every task now lives inside a realistic client project so developers learn the stack, the AI workflows, and how Orium actually delivers — together, not in sequence.</p>
+  <p style="margin-top: 6px;">The Fieldstone Supply Co. ecosystem now includes a working Confluence space, a Claude Project pre-loaded with project context, a GitHub repository, and the Atlas simulation itself. One Tech Director has reviewed the content and provided feedback — most of which has been incorporated.</p>
+  <p style="margin-top: 6px;">What we need now is tech partnership to stand up the infrastructure layer: a real Jira project, platform instances, Vercel deployment, and Figma designs.</p>
   <p style="margin-top: 6px; font-size: 13px; color: var(--text-tertiary);">The full simulation is in Part 2. The ask of tech leads is in Part 3.</p>
 </div>
 
@@ -170,6 +171,7 @@
     <li>Project brief</li>
     <li>Jira board</li>
     <li>Team comments</li>
+    <li>Pause before you continue</li>
     <li>Before you escalate</li>
     <li>Launch recommendation</li>
     <li>What good looks like</li>
@@ -286,8 +288,9 @@
 <div class="section">
   <div class="card" style="background: #f5f4fe; border-color: var(--purple-200);">
     <div class="card-title">Welcome to Project Atlas</div>
-    <p>You're joining an active Orium project. A mid-market retailer is launching a composable storefront. Discovery is complete. The team is 4 weeks from launch. Your first story is waiting.</p>
-    <p style="margin-top: 6px;">The point of Atlas is to practice contributing project velocity: understanding context quickly, using AI well, identifying ambiguity early, and moving work forward without waiting for perfect information.</p>
+    <p>You're joining Project Atlas midway through delivery. The team has already completed discovery, established the architecture, and delivered several features. Like many developers at Orium, you won't receive every piece of context through a formal kickoff meeting — you'll need to orient yourself using the project artefacts available to you.</p>
+    <p style="margin-top: 6px;">Your job isn't to learn everything. It's to quickly understand enough to begin contributing, ask thoughtful questions, communicate risks, and make informed recommendations.</p>
+    <p style="margin-top: 6px;">Over the next four parts, you'll investigate the project, get your local environment running, complete a feature, and prepare it for launch — just as you would on a real client engagement.</p>
     <p style="margin-top: 6px; font-size: 13px; color: var(--text-tertiary);">Read the brief. Review the Jira board. Read the team comments. Then decide what you'd do first.</p>
   </div>
 
@@ -321,7 +324,7 @@
   <h3>Project brief</h3>
   <div class="card" style="border-left: 3px solid var(--purple-600); border-radius: 0 10px 10px 0; margin-bottom: 1.25rem;">
     <div class="card-title">How Orium developers use AI</div>
-    <p>Today, many Orium developers use Claude for reasoning, planning, debugging, and long-context work — orientation, understanding architecture, drafting tickets. For everyday coding and autocomplete, GitHub Copilot inside VS Code. For repo-wide refactoring or navigating unfamiliar codebases, Cursor.</p>
+    <p>Most Orium developers use Claude throughout the development lifecycle — from understanding architecture and planning work to writing, reviewing, and refining code. Claude is our primary AI development tool. GitHub Copilot and Cursor can be useful in specific situations, but if you're unsure where to start, start with Claude.</p>
     <p style="margin-top: 6px;">The general principle: AI is most useful when the task has enough context to work with. For agents specifically — watch the output, keep tasks small, and validate everything. Token cost and time cost are real.</p>
   </div>
 
@@ -334,6 +337,8 @@
   <h4>Business goals</h4>
   <div class="card">
     <ul>
+      <li>Support browsing and purchasing products through a modern composable commerce storefront</li>
+      <li>Maintain accurate product information, pricing, and availability across commerce systems</li>
       <li>Launch English and French-Canadian storefronts simultaneously</li>
       <li>Migrate existing press release archive from legacy CMS (47 press releases, mostly free-text HTML)</li>
       <li>Support compliance team's requirement for downloadable PDF press releases</li>
@@ -343,7 +348,7 @@
 
   <h4>Architecture</h4>
   <div class="card">
-    <p style="margin-bottom: 10px; font-size: 13px;">Commerce data flow:</p>
+    <p style="margin-bottom: 10px; font-size: 13px;">Commerce data flow — listing pages (PLP):</p>
     <div class="arch-flow">
       <div class="arch-box">commercetools</div>
       <div class="arch-arrow">→</div>
@@ -352,6 +357,22 @@
       <div class="arch-box">Algolia</div>
       <div class="arch-arrow">→</div>
       <div class="arch-box">Next.js storefront</div>
+    </div>
+    <p style="margin-top: 10px; margin-bottom: 10px; font-size: 13px;">Commerce data flow — product detail pages (PDP):</p>
+    <div class="arch-flow">
+      <div class="arch-box">commercetools</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Accelerator</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Next.js storefront</div>
+    </div>
+    <p style="margin-top: 10px; margin-bottom: 10px; font-size: 13px;">Sync flow — product data from legacy systems:</p>
+    <div class="arch-flow">
+      <div class="arch-box">Legacy PIM / ERP</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">commercetools</div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">Algolia</div>
     </div>
     <p style="margin-top: 10px; margin-bottom: 10px; font-size: 13px;">Content data flow:</p>
     <div class="arch-flow">
@@ -368,6 +389,8 @@
   <div class="card">
     <div class="risk-row"><div class="risk-dot risk-high"></div><div class="risk-text">French-Canadian locale not yet tested end-to-end — number and date formatting unverified</div></div>
     <div class="risk-row"><div class="risk-dot risk-high"></div><div class="risk-text">PDF compliance requirement surfaced late — not in original scope, no Contentful model exists yet</div></div>
+    <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">Algolia index not scoped for editorial content — search is configured for products, not press releases; if releases need to be searchable or year-filterable via facets, the index and ranking rules are unbuilt</div></div>
+    <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">commercetools → Algolia sync untested — no confirmation that pricing, availability, and catalog data index correctly or stay in sync; stale data would surface as wrong results</div></div>
     <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">Press release filtering by year requested by client but not in approved scope</div></div>
     <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">Legacy migration — 47 press releases, no structured data, mostly free-text HTML</div></div>
   </div>
@@ -403,13 +426,33 @@
   <div class="ticket">
     <div class="ticket-id">ATLAS-101 <span class="badge badge-purple">In progress</span> <span class="badge badge-gray">Yours</span></div>
     <div class="ticket-title">Create Press Release content type in Contentful</div>
-    <p style="font-size: 14px;">Set up the Contentful content model to support press releases on the new storefront.</p>
-    <ul style="margin-top: 8px;">
-      <li>Fields: title, slug, date, summary, body (rich text), hero image</li>
-      <li>Should support both <code>en-CA</code> and <code>fr-CA</code> locales</li>
-      <li>Reuse existing patterns from the Blog content type where possible</li>
+
+    <p style="font-size: 13px; font-weight: 500; color: var(--text); margin: 10px 0 4px;">Background</p>
+    <p style="font-size: 14px;">Fieldstone's legacy CMS contains 47 press releases that need to be migrated to Contentful as part of the new composable storefront launch. Before migration can begin, the content model needs to be in place. This ticket covers the content type definition only — migration is a separate workstream.</p>
+
+    <p style="font-size: 13px; font-weight: 500; color: var(--text); margin: 10px 0 4px;">Acceptance criteria</p>
+    <ul style="margin-top: 4px;">
+      <li>Press Release content type exists in Contentful with the following fields: title (short text), slug (short text, unique), date (date/time), summary (short text), body (rich text), hero image (media)</li>
+      <li>Content type supports both <code>en-CA</code> and <code>fr-CA</code> locales</li>
+      <li>Slug field is validated as URL-safe and unique across entries</li>
+      <li>Content type reviewed and approved by Tech Lead before entries are created</li>
     </ul>
-    <div class="ticket-note">⚠️ Client has asked about PDF attachments. Not in scope for this ticket. See ATLAS-104. Tech lead flagged: resolve ATLAS-104 scope before modifying this model.</div>
+
+    <p style="font-size: 13px; font-weight: 500; color: var(--text); margin: 10px 0 4px;">Technical notes</p>
+    <ul style="margin-top: 4px;">
+      <li>Review the existing Blog content type before creating anything new — reuse patterns where possible to keep the model consistent</li>
+      <li>Slug generation should follow the same pattern as Blog entries — confirm with Tech Lead if unsure</li>
+      <li>Do not add a PDF attachment field to this model until ATLAS-104 scope is resolved</li>
+    </ul>
+
+    <p style="font-size: 13px; font-weight: 500; color: var(--text); margin: 10px 0 4px;">Dependencies</p>
+    <ul style="margin-top: 4px;">
+      <li>ATLAS-104 — PDF scope must be resolved before this model is considered final</li>
+      <li>ATLAS-102, ATLAS-103 — blocked until this ticket is complete</li>
+    </ul>
+
+    <p style="font-size: 13px; font-weight: 500; color: var(--text); margin: 10px 0 4px;">Outstanding questions</p>
+    <div class="ticket-note" style="background: var(--amber-50); border-left: 3px solid var(--amber-600);">⚠️ The hero image field — should this be required or optional? Legacy press releases don't all have images. Confirm with PM before building. If optional, the frontend will need to handle the empty state gracefully.</div>
   </div>
 
   <div class="ticket">
@@ -433,7 +476,7 @@
       <li>Should handle empty state gracefully</li>
       <li>Client has asked about year filtering — not in current scope</li>
     </ul>
-    <div class="ticket-note">⚠️ Performance flag: early testing shows this page may be fetching more Contentful data than needed. Before this ticket is considered complete, review the Contentful payload shape, image handling, caching approach, and whether any unnecessary linked content is being resolved. Do not ship a dynamically generated page without a caching strategy in place.</div>
+    <div class="ticket-note">⚠️ Performance consideration: listing pages can easily over-fetch Contentful data. Before completing this ticket, review the Contentful payload shape, image handling, caching strategy, and whether any unnecessary linked content is being resolved. Do not ship a dynamically generated page without a caching strategy in place.</div>
   </div>
 
   <div class="ticket">
@@ -513,10 +556,37 @@
   </div>
 </div>
 
+<!-- CONSULTING PAUSE -->
+<div class="section">
+  <div class="card" style="border-left: 3px solid var(--red-600); border-radius: 0 10px 10px 0;">
+    <div class="card-title" style="color: var(--red-800);">Pause before you continue</div>
+    <p>Before you open the codebase, take 10 minutes and write down your answers to these questions:</p>
+    <ul style="margin-top: 8px;">
+      <li>What assumptions are being made — by the team, by the client, and by you?</li>
+      <li>Which requests are actually in scope? Which ones aren't?</li>
+      <li>Which conversations need to happen before anyone writes code?</li>
+      <li>Is there anything here you would push back on — and how would you frame that?</li>
+      <li>What would you raise in stand-up tomorrow?</li>
+    </ul>
+    <p style="margin-top: 10px; font-size: 13px; color: var(--text-tertiary);">Orium developers are consultants, not ticket processors. The most valuable thing you can do at this stage isn't to start building — it's to make sure the right things get built.</p>
+  </div>
+</div>
+
 <!-- SME + DEVELOPER VOICE -->
 <div class="section">
   <h3>Before you escalate</h3>
-  <p style="margin-bottom: 1rem;">When you hit a wall, the instinct to ask for help immediately is understandable — but on real projects, knowing <em>who</em> to ask and <em>what kind of problem</em> you have first is part of the job. Orium has SMEs across every platform area. Before you escalate, take a moment to categorize the issue:</p>
+  <p style="margin-bottom: 1rem;">When you hit a wall, the instinct to ask for help immediately is understandable — but on real projects, knowing <em>who</em> to ask and <em>what kind of problem</em> you have first is part of the job. Before escalating, work through this sequence:</p>
+
+  <div class="card" style="margin-bottom: 1rem;">
+    <ol style="margin: 0; padding-left: 1.4rem;">
+      <li style="margin-bottom: 6px; font-size: 14px;">Use AI, search the codebase, and check project documentation first</li>
+      <li style="margin-bottom: 6px; font-size: 14px;">Bring it to your <strong>buddy</strong> — they'll help you think through it and route it correctly</li>
+      <li style="margin-bottom: 6px; font-size: 14px;">Escalate to your <strong>SDM</strong> if it can't be resolved with your buddy</li>
+      <li style="font-size: 14px;">Reach out to the appropriate <strong>SME</strong> for platform-specific questions your SDM can't answer</li>
+    </ol>
+  </div>
+
+  <p style="margin-bottom: 1rem; font-size: 14px; color: var(--text-secondary);">If the issue creates project risk at any point in that sequence — communicate it early, don't wait until it's resolved. Orium has SMEs across every platform area. Once you've identified the right category, check the SME list:</p>
 
   <div class="card">
     <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
@@ -636,22 +706,55 @@
 <h2>Part 3 — What we're asking from tech leads</h2>
 
 <div class="onepager">
-  <h2>Your input before we move forward</h2>
-  <p style="font-size: 14px; color: var(--text-tertiary); margin-bottom: 1.25rem;">For Nik and engineering leads · Please review before we finalize</p>
+  <h2>Where we are and what we need</h2>
+  <p style="font-size: 14px; color: var(--text-tertiary); margin-bottom: 1.25rem;">For Nik and engineering leads</p>
 
-  <h3>What we're trying to solve</h3>
-  <p>Our goal is to help developers contribute meaningful project velocity faster. Today, much of onboarding happens outside the context of a real project — the stack gets learned, the tools get configured, but the delivery model and decision-making expectations come later, on a live client engagement. Atlas introduces that context earlier, so developers learn the technology, AI workflows, and consulting behaviours together rather than in sequence.</p>
-
-  <h3 style="margin-top: 1.25rem;">What we need you to tell us</h3>
-  <p>We've built this without real project data — which means the scenario, tickets, and team dynamics are plausible but not verified. Before we use this with actual new hires, we need engineering leads to pressure-test it:</p>
+  <h3>What's already built</h3>
+  <p>The content and experience layer of Atlas is complete. One Tech Director has reviewed and provided feedback — most of which has been incorporated. Here's what exists today:</p>
 
   <div class="card" style="margin-top: 0.5rem;">
-    <ul style="margin: 0;">
-      <li><strong>Does the scenario feel like a real Orium project?</strong> Client type, architecture, constraints, timeline — does this ring true?</li>
-      <li><strong>Are the tickets written the way Orium actually writes them?</strong> The gaps and ambiguity are intentional — but are they the <em>right</em> kind of gaps?</li>
-      <li><strong>Is the tradeoff scenario realistic?</strong> Would a senior developer on your team actually face this kind of decision?</li>
-      <li><strong>If a developer completed Atlas, what would they still be missing before joining your project?</strong> This is the most important question — we'd rather know now than find out on a client engagement.</li>
-    </ul>
+    <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Project Atlas simulation</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;"><span class="badge badge-teal">✅ Live</span> — this document</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Fieldstone Confluence space</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;"><span class="badge badge-teal">✅ Live</span> — 7 pages of realistic project context</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Fieldstone Claude Project</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;"><span class="badge badge-teal">✅ Live</span> — 7 knowledge documents + system prompt</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); vertical-align: top;">GitHub repository</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); vertical-align: top;"><span class="badge badge-teal">✅ Live</span> — README, architecture docs, setup guide</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3 style="margin-top: 1.5rem;">What needs tech partnership</h3>
+  <p>The infrastructure layer requires technical setup and support. These are the items we need help with:</p>
+
+  <div class="card" style="margin-top: 0.5rem;">
+    <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Jira project with AI-assisted tickets</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;"><span class="badge badge-amber">🤝 Needs tech</span></td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Accelerator bootstrap + platform instances</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;"><span class="badge badge-amber">🤝 Needs tech</span></td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Vercel deployment + PR preview</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;"><span class="badge badge-amber">🤝 Needs tech</span></td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); vertical-align: top;">Figma designs</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); vertical-align: top;"><span class="badge badge-amber">🤝 Needs design</span></td>
+      </tr>
+    </table>
   </div>
 
   <h3 style="margin-top: 1.5rem;">What we're asking of tech leads ongoing</h3>
@@ -667,7 +770,7 @@
     <li>Could we run this six months from now without heroic effort from tech leads?</li>
   </ol>
 
-  <p style="margin-top: 1.25rem; font-size: 14px; color: var(--text-secondary);">If the answer to all three is yes, we'd like to move forward. If something feels off — the scenario, the ask, the structure — we want to know before this goes in front of a new hire. Your read on this matters more than ours.</p>
+  <p style="margin-top: 1.25rem; font-size: 14px; color: var(--text-secondary);">The goal is developers who can join a project in week three and add velocity — not just developers who've completed a checklist. Your partnership on the infrastructure layer is what takes Atlas from a strong simulation to a complete onboarding experience.</p>
 </div>
 
 </body>
