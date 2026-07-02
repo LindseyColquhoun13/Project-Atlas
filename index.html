@@ -240,7 +240,7 @@
       <tr>
         <td>Project setup</td>
         <td>~2–3 days</td>
-        <td>Provision the environment — accelerator, Contentful, commercetools, Algolia — framed as ATLAS-001: <em>prepare local environment for the Fieldstone project.</em> The goal isn't just a working environment — it's understanding what you'll be debugging and extending on this project.</td>
+        <td>Provision the environment — accelerator, Contentstack, commercetools, Algolia — framed as ATLAS-001: <em>prepare local environment for the Fieldstone project.</em> The goal isn't just a working environment — it's understanding what you'll be debugging and extending on this project.</td>
       </tr>
       <tr>
         <td>Implementation</td>
@@ -376,19 +376,19 @@
     </div>
     <p style="margin-top: 10px; margin-bottom: 10px; font-size: 13px;">Content data flow:</p>
     <div class="arch-flow">
-      <div class="arch-box">Contentful</div>
+      <div class="arch-box">Contentstack</div>
       <div class="arch-arrow">→</div>
       <div class="arch-box">Accelerator</div>
       <div class="arch-arrow">→</div>
       <div class="arch-box">Next.js storefront</div>
     </div>
-    <p style="margin-top: 12px; font-size: 13px; color: var(--text-tertiary);">Hosted on Vercel. Two locales: <code>en-CA</code> and <code>fr-CA</code>. Contentful handles all editorial content including press releases.</p>
+    <p style="margin-top: 12px; font-size: 13px; color: var(--text-tertiary);">Hosted on Vercel. Two locales: <code>en-CA</code> and <code>fr-CA</code>. Contentstack handles all editorial content including press releases.</p>
   </div>
 
   <h4>Known risks</h4>
   <div class="card">
     <div class="risk-row"><div class="risk-dot risk-high"></div><div class="risk-text">French-Canadian locale not yet tested end-to-end — number and date formatting unverified</div></div>
-    <div class="risk-row"><div class="risk-dot risk-high"></div><div class="risk-text">PDF compliance requirement surfaced late — not in original scope, no Contentful model exists yet</div></div>
+    <div class="risk-row"><div class="risk-dot risk-high"></div><div class="risk-text">PDF compliance requirement surfaced late — not in original scope, no Contentstack content type exists yet</div></div>
     <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">Algolia index not scoped for editorial content — search is configured for products, not press releases; if releases need to be searchable or year-filterable via facets, the index and ranking rules are unbuilt</div></div>
     <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">commercetools → Algolia sync untested — no confirmation that pricing, availability, and catalog data index correctly or stay in sync; stale data would surface as wrong results</div></div>
     <div class="risk-row"><div class="risk-dot risk-med"></div><div class="risk-text">Press release filtering by year requested by client but not in approved scope</div></div>
@@ -416,7 +416,7 @@
     <ul style="margin-top: 8px;">
       <li>Accelerator running locally</li>
       <li>commercetools configured and product data imported</li>
-      <li>Contentful connected with initial content loaded</li>
+      <li>Contentstack connected with initial content loaded</li>
       <li>Algolia configured and indexing functioning</li>
       <li>Homepage, PLP, PDP, and checkout all verified</li>
     </ul>
@@ -425,14 +425,14 @@
 
   <div class="ticket">
     <div class="ticket-id">ATLAS-101 <span class="badge badge-purple">In progress</span> <span class="badge badge-gray">Yours</span></div>
-    <div class="ticket-title">Create Press Release content type in Contentful</div>
+    <div class="ticket-title">Create Press Release content type in Contentstack</div>
 
     <p style="font-size: 13px; font-weight: 500; color: var(--text); margin: 10px 0 4px;">Background</p>
-    <p style="font-size: 14px;">Fieldstone's legacy CMS contains 47 press releases that need to be migrated to Contentful as part of the new composable storefront launch. Before migration can begin, the content model needs to be in place. This ticket covers the content type definition only — migration is a separate workstream.</p>
+    <p style="font-size: 14px;">Fieldstone's legacy CMS contains 47 press releases that need to be migrated to Contentstack as part of the new composable storefront launch. Before migration can begin, the content model needs to be in place. This ticket covers the content type definition only — migration is a separate workstream.</p>
 
     <p style="font-size: 13px; font-weight: 500; color: var(--text); margin: 10px 0 4px;">Acceptance criteria</p>
     <ul style="margin-top: 4px;">
-      <li>Press Release content type exists in Contentful with the following fields: title (short text), slug (short text, unique), date (date/time), summary (short text), body (rich text), hero image (media)</li>
+      <li>Press Release content type exists in Contentstack with the following fields: title (short text), slug (short text, unique), date (date/time), summary (short text), body (rich text), hero image (media)</li>
       <li>Content type supports both <code>en-CA</code> and <code>fr-CA</code> locales</li>
       <li>Slug field is validated as URL-safe and unique across entries</li>
       <li>Content type reviewed and approved by Tech Lead before entries are created</li>
@@ -476,7 +476,7 @@
       <li>Should handle empty state gracefully</li>
       <li>Client has asked about year filtering — not in current scope</li>
     </ul>
-    <div class="ticket-note">⚠️ Performance consideration: listing pages can easily over-fetch Contentful data. Before completing this ticket, review the Contentful payload shape, image handling, caching strategy, and whether any unnecessary linked content is being resolved. Do not ship a dynamically generated page without a caching strategy in place.</div>
+    <div class="ticket-note">⚠️ Performance consideration: listing pages can easily over-fetch Contentstack data. Before completing this ticket, review the Contentstack payload shape, image handling, caching strategy, and whether any unnecessary linked content is being resolved. Do not ship a dynamically generated page without a caching strategy in place.</div>
   </div>
 
   <div class="ticket">
@@ -486,7 +486,7 @@
     <ul style="margin-top: 8px;">
       <li>Scope unclear — PDF upload vs. auto-generated from content?</li>
       <li>Not in original SOW. Raised by client in last standup.</li>
-      <li>May require Contentful model change — dependency on ATLAS-101</li>
+      <li>May require Contentstack content type change — dependency on ATLAS-101</li>
     </ul>
     <div class="ticket-note">⚠️ No acceptance criteria. No design. Do not build until scope is resolved with PM and tech lead.</div>
   </div>
@@ -527,7 +527,7 @@
     <div class="avatar av-pm">PM</div>
     <div class="comment-inner">
       <div class="comment-name">Sarah (PM)</div>
-      <div class="comment-text">Also — quick question on the PDFs. Could we just store them as assets in commercetools? That way they're in one place with the product data. Seems simpler than adding another field to Contentful?</div>
+      <div class="comment-text">Also — quick question on the PDFs. Could we just store them as assets in commercetools? That way they're in one place with the product data. Seems simpler than adding another field to Contentstack?</div>
     </div>
   </div>
 
@@ -543,7 +543,7 @@
     <div class="avatar av-tl">TL</div>
     <div class="comment-inner">
       <div class="comment-name">Dev (Tech Lead)</div>
-      <div class="comment-text">On the PDF question — before we touch the Contentful model, let's understand what compliance actually needs. "Downloadable PDF" could mean a lot of things. Don't build anything on ATLAS-104 until we know. Also, reuse Blog content type patterns as much as possible on 101.</div>
+      <div class="comment-text">On the PDF question — before we touch the Contentstack content type, let's understand what compliance actually needs. "Downloadable PDF" could mean a lot of things. Don't build anything on ATLAS-104 until we know. Also, reuse existing content type patterns as much as possible on 101.</div>
     </div>
   </div>
 
@@ -599,8 +599,8 @@
         <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for Accelerator / Starter Kit</td>
       </tr>
       <tr>
-        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Contentful content model or API behaviour</td>
-        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for Contentful</td>
+        <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Contentstack content type or API behaviour</td>
+        <td style="padding: 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Check the current SME list for Contentstack</td>
       </tr>
       <tr>
         <td style="padding: 8px 8px 8px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top;">Algolia search, indexing, or ranking</td>
